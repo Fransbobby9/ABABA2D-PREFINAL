@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Books {
 
-    // Helper method for input validation
     private String getValidInput(Scanner sc, String prompt, String validationPattern, String errorMessage) {
         String input;
         do {
