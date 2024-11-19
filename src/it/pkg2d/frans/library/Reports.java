@@ -17,10 +17,10 @@ public class Reports {
         do {
             System.out.println("\n--------------------------");
             System.out.println("REPORTS MENU              |");
-            System.out.println("1. VIEW ALL BOOKS          |");
+            System.out.println("1. VIEW ALL BOOKS         |");
             System.out.println("2. VIEW ALL BORROWED BOOKS |");
-            System.out.println("3. VIEW AVAILABLE BOOKS    |");
-            System.out.println("4. EXIT                    |");
+            System.out.println("3. VIEW AVAILABLE BOOKS   |");
+            System.out.println("4. EXIT                   |");
             System.out.println("--------------------------");
 
             int action = getValidIntInput(sc, 1, 4);
@@ -55,7 +55,7 @@ public class Reports {
         String sqlQuery = "SELECT BookID, Title, Author, Genre, ISBN, Status FROM Books";
         String[] headers = {"BookID", "Title", "Author", "Genre", "ISBN", "Status"};
         String[] columns = {"BookID", "Title", "Author", "Genre", "ISBN", "Status"};
-        executeQueryAndDisplayResults(sqlQuery, headers,columns);
+        executeQueryAndDisplayResults(sqlQuery, headers, columns);
     }
 
     private void viewAllBorrowedBooks() {
@@ -119,6 +119,7 @@ public class Reports {
         boolean valid = false;
 
         while (!valid) {
+            System.out.print("Enter choice (" + min + "-" + max + "): ");
             try {
                 input = sc.nextInt();
                 sc.nextLine(); 
@@ -126,10 +127,10 @@ public class Reports {
                 if (input >= min && input <= max) {
                     valid = true;
                 } else {
-                    System.out.print("Invalid selection, try again (" + min + "-" + max + "): ");
+                    System.out.println("Invalid selection, please enter a number between " + min + " and " + max + ".");
                 }
             } catch (InputMismatchException e) {
-                System.out.print("Invalid input. Please enter a number (" + min + "-" + max + "): ");
+                System.out.println("Invalid input. Please enter a number.");
                 sc.nextLine(); 
             }
         }

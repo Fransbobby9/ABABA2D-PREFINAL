@@ -16,6 +16,17 @@ public class Books {
         return input;
     }
 
+    private int getValidIntInput(Scanner sc, String prompt) {
+        System.out.print(prompt);
+        while (!sc.hasNextInt()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            sc.next(); 
+        }
+        int input = sc.nextInt();
+        sc.nextLine(); 
+        return input;
+    }
+
     public void bDetails() {
         Scanner sc = new Scanner(System.in);
         String response;
@@ -30,39 +41,29 @@ public class Books {
             System.out.println("5. EXIT                   |");
             System.out.println("--------------------------");
 
-            System.out.print("Enter Selection: ");
-            int action = sc.nextInt();
-            sc.nextLine(); 
-
+            int action = getValidIntInput(sc, "Enter Selection (1-5): ");
             while (action < 1 || action > 5) {
-                System.out.print("Invalid selection, Try Again: ");
-                while (!sc.hasNextInt()) {
-                    System.out.print("Please enter a valid number: ");
-                    sc.next(); 
-                }
-                action = sc.nextInt();
-                sc.nextLine();  
+                System.out.print("Invalid selection. Try again: ");
+                action = getValidIntInput(sc, "Enter Selection (1-5): ");
             }
-
-            Books bk = new Books();
 
             switch (action) {
                 case 1:
-                    bk.addBook(sc);
-                    bk.viewBooks();
+                    addBook(sc);
+                    viewBooks();
                     break;
                 case 2:
-                    bk.viewBooks();
+                    viewBooks();
                     break;
                 case 3:
-                    bk.viewBooks();
-                    bk.updateBook(sc);
-                    bk.viewBooks();
+                    viewBooks();
+                    updateBook(sc);
+                    viewBooks();
                     break;
                 case 4:
-                    bk.viewBooks();
-                    bk.deleteBook(sc);
-                    bk.viewBooks();
+                    viewBooks();
+                    deleteBook(sc);
+                    viewBooks();
                     break;
                 case 5:
                     System.out.println("Exiting Book Panel.");
@@ -76,9 +77,7 @@ public class Books {
 
     public void addBook(Scanner sc) {
         try {
-            System.out.print("How many books do you want to add? ");
-            int numberOfBooks = sc.nextInt();
-            sc.nextLine();  
+            int numberOfBooks = getValidIntInput(sc, "How many books do you want to add? ");
 
             for (int i = 0; i < numberOfBooks; i++) {
                 System.out.println("Enter details for Book " + (i + 1));
@@ -86,7 +85,7 @@ public class Books {
                 String title = getValidInput(sc, "Book Title: ", null, "Title cannot be empty.");
                 String author = getValidInput(sc, "Book Author: ", null, "Author cannot be empty.");
                 String genre = getValidInput(sc, "Book Genre: ", null, "Genre cannot be empty.");
-                String isbn = getValidInput(sc, "Book ISBN (13 digits): ", "[0-9]{13}", "Invalid ISBN, Please enter 13 digits.");
+                String isbn = getValidInput(sc, "Book ISBN (13 digits): ", "\\d{13}", "Invalid ISBN, please enter 13 digits.");
 
                 String sql = "INSERT INTO Books (Title, Author, Genre, ISBN, Status) VALUES (?, ?, ?, ?, 'Available')";
                 config conf = new config();
@@ -116,21 +115,17 @@ public class Books {
     public void updateBook(Scanner sc) {
         try {
             config conf = new config();
-
-            System.out.print("Enter Book ID to update: ");
-            int id = sc.nextInt();
-            sc.nextLine(); 
-
+            int id = getValidIntInput(sc, "Enter Book ID to update: ");
+            
             while (conf.getSingleValue("SELECT BookID FROM Books WHERE BookID = ?", id) == 0) {
                 System.out.print("Selected ID doesn't exist. Try again: ");
-                id = sc.nextInt();
-                sc.nextLine(); 
+                id = getValidIntInput(sc, "Enter Book ID to update: ");
             }
 
             String title = getValidInput(sc, "Book Title: ", null, "Title cannot be empty.");
             String author = getValidInput(sc, "Book Author: ", null, "Author cannot be empty.");
             String genre = getValidInput(sc, "Book Genre: ", null, "Genre cannot be empty.");
-            String isbn = getValidInput(sc, "Book ISBN (13 digits): ", "[0-9]{13}", "Invalid ISBN, Please enter 13 digits.");
+            String isbn = getValidInput(sc, "Book ISBN (13 digits): ", "\\d{13}", "Invalid ISBN, please enter 13 digits.");
             String status = getValidInput(sc, "Book Status (Available/Borrowed): ", "(Available|Borrowed)", "Invalid status, please enter 'Available' or 'Borrowed'.");
 
             String qry = "UPDATE Books SET Title = ?, Author = ?, Genre = ?, ISBN = ?, Status = ? WHERE BookID = ?";
@@ -145,15 +140,11 @@ public class Books {
     public void deleteBook(Scanner sc) {
         try {
             config conf = new config();
-
-            System.out.print("Enter Book ID to delete: ");
-            int id = sc.nextInt();
-            sc.nextLine();  
+            int id = getValidIntInput(sc, "Enter Book ID to delete: ");
 
             while (conf.getSingleValue("SELECT BookID FROM Books WHERE BookID = ?", id) == 0) {
                 System.out.print("Selected ID doesn't exist. Try again: ");
-                id = sc.nextInt();
-                sc.nextLine();  
+                id = getValidIntInput(sc, "Enter Book ID to delete: ");
             }
 
             String sqlDelete = "DELETE FROM Books WHERE BookID = ?";

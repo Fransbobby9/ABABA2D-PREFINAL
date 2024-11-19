@@ -4,6 +4,18 @@ import java.util.Scanner;
 
 public class Students {
 
+    private int getValidIntInput(Scanner sc, String prompt) {
+        int input;
+        System.out.print(prompt);
+        while (!sc.hasNextInt()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            sc.next(); 
+        }
+        input = sc.nextInt();
+        sc.nextLine(); 
+        return input;
+    }
+
     public void sDetails() {
         Scanner sc = new Scanner(System.in);
         String response;
@@ -18,14 +30,10 @@ public class Students {
             System.out.println("5. EXIT                    |");
             System.out.println("--------------------------");
 
-            System.out.print("Enter Selection: ");
-            int action = sc.nextInt();
-            sc.nextLine();  
-
+            int action = getValidIntInput(sc, "Enter Selection (1-5): ");
             while (action < 1 || action > 5) {
                 System.out.print("Invalid selection, Try Again: ");
-                action = sc.nextInt();
-                sc.nextLine();  
+                action = getValidIntInput(sc, "Enter Selection (1-5): ");
             }
 
             switch (action) {
@@ -55,15 +63,8 @@ public class Students {
     }
 
     public void addStudent(Scanner sc) {
-        System.out.print("How many students do you want to add? ");
-        while (!sc.hasNextInt()) {
-            System.out.print("Please enter a valid number: ");
-            sc.next();
-        }
-
-        int numberOfStudents = sc.nextInt();
-        sc.nextLine();  
-
+        int numberOfStudents = getValidIntInput(sc, "How many students do you want to add? ");
+        
         for (int i = 0; i < numberOfStudents; i++) {
             System.out.println("Enter details for Student " + (i + 1));
 
@@ -93,14 +94,10 @@ public class Students {
     public void updateStudent(Scanner sc) {
         config conf = new config();
 
-        System.out.print("Enter Student ID to update: ");
-        int id = sc.nextInt();
-        sc.nextLine(); 
-
+        int id = getValidIntInput(sc, "Enter Student ID to update: ");
         while (conf.getSingleValue("SELECT s_id FROM Students WHERE s_id = ?", id) == 0) {
             System.out.print("Selected ID doesn't exist. Try again: ");
-            id = sc.nextInt();
-            sc.nextLine(); 
+            id = getValidIntInput(sc, "Enter Student ID to update: ");
         }
 
         String s_name = getValidatedInput(sc, "Student Name: ", true);
@@ -117,12 +114,10 @@ public class Students {
     public void deleteStudent(Scanner sc) {
         config conf = new config();
 
-        System.out.print("Enter Student ID to delete: ");
-        int id = sc.nextInt();
-
+        int id = getValidIntInput(sc, "Enter Student ID to delete: ");
         while (conf.getSingleValue("SELECT s_id FROM Students WHERE s_id = ?", id) == 0) {
             System.out.print("Selected ID doesn't exist. Try again: ");
-            id = sc.nextInt();
+            id = getValidIntInput(sc, "Enter Student ID to delete: ");
         }
 
         String sqlDelete = "DELETE FROM Students WHERE s_id = ?";

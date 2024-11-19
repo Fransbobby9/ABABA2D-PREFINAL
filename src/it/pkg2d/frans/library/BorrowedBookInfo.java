@@ -39,12 +39,10 @@ public class BorrowedBookInfo {
             System.out.println("5. EXIT                    |");
             System.out.println("--------------------------");
 
-            System.out.print("Enter Selection: ");
-            int action = sc.nextInt();
-
+            int action = getValidIntInput(sc, "Enter Selection (1-5): ");
             while (action < 1 || action > 5) {
                 System.out.print("Invalid selection, Try Again: ");
-                action = sc.nextInt();
+                action = getValidIntInput(sc, "Enter Selection (1-5): ");
             }
 
             switch (action) {
@@ -112,7 +110,7 @@ public class BorrowedBookInfo {
             int transactionId = getValidIntInput(sc, "Enter Transaction ID to update: ");
             while (conf.getSingleValue("SELECT TransactionID FROM BorrowedBooks WHERE TransactionID = ?", transactionId) == 0) {
                 System.out.print("Selected Transaction ID doesn't exist. Try again: ");
-                transactionId = sc.nextInt();
+                transactionId = getValidIntInput(sc, "Enter Transaction ID to update: ");
             }
 
             String dueDate = getValidDateInput(sc, "Enter New Due Date (YYYY-MM-DD): ");
@@ -132,7 +130,7 @@ public class BorrowedBookInfo {
             int transactionId = getValidIntInput(sc, "Enter Transaction ID to delete: ");
             while (conf.getSingleValue("SELECT TransactionID FROM BorrowedBooks WHERE TransactionID = ?", transactionId) == 0) {
                 System.out.print("Selected Transaction ID doesn't exist. Try again: ");
-                transactionId = sc.nextInt();
+                transactionId = getValidIntInput(sc, "Enter Transaction ID to delete: ");
             }
 
             String sqlDelete = "DELETE FROM BorrowedBooks WHERE TransactionID = ?";
